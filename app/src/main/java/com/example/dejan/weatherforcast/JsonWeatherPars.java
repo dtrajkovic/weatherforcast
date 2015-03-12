@@ -1,9 +1,9 @@
 package com.example.dejan.weatherforcast;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,12 +17,13 @@ public class JsonWeatherPars {
     public static CurrentWeather getCurrentWeather(String data) throws JSONException {
 
         CurrentWeather weather = new CurrentWeather();
-
         JSONObject jObj = new JSONObject(data);
         weather.setName(getString("name", jObj));
+        weather.setDay(getLong("dt",jObj));
         JSONArray current = jObj.getJSONArray("weather");
         JSONObject desJSON = current.getJSONObject(0);
         weather.setDescription(getString("description", desJSON));
+        weather.setIcon(getString("icon",desJSON));
         JSONObject tempMinMax = getObject("main", jObj);
         weather.setTemp(getInt("temp", tempMinMax));
         weather.setTempMin(getFloat("temp_min", tempMinMax));
@@ -45,14 +46,19 @@ public class JsonWeatherPars {
             JSONObject main = getObject("temp", desJSON);
             weather.setMax(getInt("max", main));
             weather.setMin(getInt("min", main));
+            JSONArray wet= desJSON.getJSONArray("weather");
+            for (int j = 0; j < wet.length(); j++) {
+                JSONObject wetJson= wet.getJSONObject(j);
+                weather.setDesc(getString("description",wetJson));
+                weather.setIcon(getString("icon",wetJson));
+
+            }
             myList.add(weather);
         }
-
         return myList;
     }
 
     public static ArrayList getHourlyWeather(String data) throws JSONException {
-
 
         ArrayList<HourlyForecast> myList = new ArrayList<>();
         JSONObject jObj = new JSONObject(data);
@@ -65,7 +71,13 @@ public class JsonWeatherPars {
             JSONObject main = getObject("main", desJSON);
             weather.setTemp(getInt("temp", main));
             Date date = new Date(a*1000);
-            weather.setConvertTime(""+new SimpleDateFormat("EEE  HH").format(date));
+            weather.setConvertTime(""+new SimpleDateFormat("HH").format(date));
+            JSONArray wet= desJSON.getJSONArray("weather");
+            for (int j = 0; j < wet.length(); j++) {
+                JSONObject wetJson= wet.getJSONObject(j);
+                weather.setIcon(getString("icon",wetJson));
+
+            }
             myList.add(weather);
         }
 
@@ -87,8 +99,6 @@ public class JsonWeatherPars {
             city.setLon(getFloat("lon",desJSON));
             myList.add(city);
         }
-
-
         return myList;
     }
 

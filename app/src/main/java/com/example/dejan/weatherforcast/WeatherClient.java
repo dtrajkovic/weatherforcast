@@ -1,6 +1,11 @@
 package com.example.dejan.weatherforcast;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -19,36 +24,29 @@ public class WeatherClient {
     private static String DAILY_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
     private static String HOURLY_URL = "http://api.openweathermap.org/data/2.5/forecast?q=";
 
-
     public String getCurrentWeather(String location) {
         URL url;
         HttpURLConnection con = null;
         InputStream is = null;
-
         try {
             url = new URL(CURRENT_URL + location + API_KEY);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
             con.setDoOutput(true);
-
             con.connect();
-
             //citanje odgovora
             StringBuffer buffer = new StringBuffer();
             is = con.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null)
                 buffer.append(line + "\r\n");
-
             is.close();
             con.disconnect();
             return buffer.toString();
-
-
         } catch (Throwable t) {
+            Log.d("WeatherclientLog", t.getMessage());
             t.printStackTrace();
         } finally {
             try {
@@ -60,9 +58,7 @@ public class WeatherClient {
             } catch (Throwable t) {
             }
         }
-
-        return null;
-
+        return "";
     }
 
 
@@ -70,31 +66,25 @@ public class WeatherClient {
         URL url;
         HttpURLConnection con = null;
         InputStream is = null;
-
         try {
             url = new URL(DAILY_URL + location + API_KEY);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
             con.setDoOutput(true);
-
             con.connect();
-
             //citanje odgovora
             StringBuffer buffer = new StringBuffer();
             is = con.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null)
                 buffer.append(line + "\r\n");
-
             is.close();
             con.disconnect();
             return buffer.toString();
-
-
         } catch (Throwable t) {
+            Log.d("WeatherclientLog", t.getMessage());
             t.printStackTrace();
         } finally {
             try {
@@ -106,10 +96,9 @@ public class WeatherClient {
             } catch (Throwable t) {
             }
         }
-
-        return null;
-
+        return "";
     }
+
     public String getHaurlyWeather(String location) {
         URL url;
         HttpURLConnection con = null;
@@ -121,24 +110,19 @@ public class WeatherClient {
             con.setRequestMethod("GET");
             con.setDoInput(true);
             con.setDoOutput(true);
-
             con.connect();
-
             //citanje odgovora
             StringBuffer buffer = new StringBuffer();
             is = con.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null)
                 buffer.append(line + "\r\n");
-
             is.close();
             con.disconnect();
             return buffer.toString();
-
-
         } catch (Throwable t) {
+            Log.d("WeatherclientLog", t.getMessage());
             t.printStackTrace();
         } finally {
             try {
@@ -150,12 +134,7 @@ public class WeatherClient {
             } catch (Throwable t) {
             }
         }
-
-        return null;
-
+        return "";
     }
-
-
-
 
 }

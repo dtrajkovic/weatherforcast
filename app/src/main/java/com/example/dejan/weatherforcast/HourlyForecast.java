@@ -1,5 +1,9 @@
 package com.example.dejan.weatherforcast;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.widget.ImageView;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +13,16 @@ public class HourlyForecast implements Serializable {
     private int temp;
     private long time;
     private  String convertTime;
+    private String icon;
+
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public int getTemp() {
         return temp;

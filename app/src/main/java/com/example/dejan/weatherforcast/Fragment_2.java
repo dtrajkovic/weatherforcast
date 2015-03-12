@@ -15,10 +15,7 @@ import com.example.dejan.weatherforcast.R;import java.util.ArrayList;
  */
 public class Fragment_2 extends Fragment {
 
-    WeatherForecast forecast = new WeatherForecast();
     public ListView days;
-
-    public ArrayList<DailyForecast> dailyForecasts;
 
     @Nullable
     @Override
@@ -26,7 +23,6 @@ public class Fragment_2 extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_2, container, false);
         days = (ListView) rootView.findViewById(R.id.days);
-
 
         return rootView;
     }
@@ -38,7 +34,5 @@ public class Fragment_2 extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
     }
-
-
 
 }

@@ -7,38 +7,71 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.dejan.weatherapp.Weather_Forcast"
-    android:background="#ffb9ffe8">
+    android:id="@+id/weatherforcast"
+    android:backgroundTintMode="add"
+    android:backgroundTint="#2f4f4f">
+
+    <LinearLayout
+        android:id="@+id/layoutProgresBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:gravity="center"
         android:id="@+id/city_name"
         android:layout_alignParentTop="true"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:gravity="center"
         android:id="@+id/descriprion"
         android:layout_below="@+id/city_name"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="100sp"
-        android:id="@+id/temp"
-        android:layout_above="@+id/day"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
         android:gravity="center"
+        android:textSize="80sp"
+        android:id="@+id/temp"
+        android:layout_above="@+id/curentDay"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:id="@+id/day"
-        android:layout_above="@+id/fragment"/>
+        android:id="@+id/curentDay"
+        android:layout_above="@+id/fragment"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:id="@+id/maxTemp"
+        android:layout_above="@+id/fragment"
+        android:layout_toLeftOf="@+id/minTemp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="15sp"
+        android:id="@+id/minTemp"
+        android:layout_above="@+id/fragment"
+        android:layout_alignParentRight="true"/>
 
     <fragment
         android:layout_width="match_parent"

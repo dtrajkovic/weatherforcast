@@ -1,6 +1,5 @@
 package com.example.dejan.weatherforcast;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,10 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.example.dejan.weatherforcast.R;import java.io.FileInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.ClassNotFoundException;import java.lang.Math;import java.lang.Override;import java.lang.String;import java.util.ArrayList;
+import java.lang.ClassNotFoundException;import java.lang.Math;
+import java.lang.String;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,12 +50,9 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
         cityList.setOnItemLongClickListener(this);
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_city_list, menu);
         return true;
     }
@@ -69,10 +64,6 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.newCity) {
             Intent intent = new Intent(CityList.this, NewCity.class);
             startActivity(intent);
@@ -96,17 +87,12 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
             stream = new ObjectInputStream(fis);
             list = (List<Weather> )stream.readObject();
             stream.close();
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
         return list;
     }
 
@@ -121,11 +107,8 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
 
     }
 
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View v, final int position, long id) {
-        //Do your tasks here
-
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Are you sure you want to delete item");
@@ -148,14 +131,10 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
                 dialog.dismiss();
             }
         });
-
         alert.show();
 
         return true;
     }
-
-
-
 
     public void saveData(List<Weather> list){
 
@@ -189,8 +168,6 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
         }
     }
 
-
-
     private class MyListAdapter extends ArrayAdapter<Weather> {
 
         ArrayList<Weather> list;
@@ -201,6 +178,7 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
             list= (ArrayList<Weather>)objects;
             inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         }
+
         @Override
         public int getCount() {
             return list.size();
@@ -213,22 +191,16 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
                 convertView = inflater.inflate(R.layout.citylistview, parent, false);
             }
 
-
             Weather weather =list.get(position);
-
             TextView city= (TextView) convertView.findViewById(R.id.citylist);
             TextView temp = (TextView) convertView.findViewById(R.id.temp_listview);
             TextView description= (TextView) convertView.findViewById(R.id.descriptionlist);
-
             city.setText(weather.currentWeather.getName());
             city.setTextColor(Color.BLACK);
             temp.setText(Math.round((weather.currentWeather.getTemp())- 273.15) + "°c");
             temp.setTextColor(Color.BLACK);
             description.setText(weather.currentWeather.getDescription());
             description.setTextColor(Color.BLACK);
-
-
-
 
             return convertView;
         }

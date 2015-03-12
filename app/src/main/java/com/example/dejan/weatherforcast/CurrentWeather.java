@@ -1,5 +1,7 @@
 package com.example.dejan.weatherforcast;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +14,33 @@ public class CurrentWeather implements Serializable {
     private int temp;
     private float tempMin;
     private float tempMax;
+    private String icon;
+    private long day;
+    private  String convertDay;
+
+    public long getDay() {
+        return day;
+    }
+
+    public void setDay(long day) {
+        this.day = day;
+    }
+
+    public String getConvertDay() {
+        return convertDay;
+    }
+
+    public void setConvertDay(String convertDay) {
+        this.convertDay = convertDay;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public int getTemp() {
         return temp;

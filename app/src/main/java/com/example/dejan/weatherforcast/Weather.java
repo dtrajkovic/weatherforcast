@@ -12,7 +12,6 @@ public class Weather implements Serializable {
     public ArrayList<DailyForecast> dailyForecasts;
     public ArrayList<HourlyForecast> hourlyForecasts;
 
-
     public Weather() {
         this.currentWeather = new CurrentWeather();
         this.dailyForecasts = new ArrayList<DailyForecast>();

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;import com.example.dejan.weatherforcast.R;
+import android.view.ViewGroup;
 
 /**
  * Created by Dejan on 2/18/2015.
@@ -20,8 +20,6 @@ public class Fragment_1 extends Fragment {
     }
 
 
-    public void Create() {
-    }
 
 
 }

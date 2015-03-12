@@ -1,6 +1,8 @@
 package com.example.dejan.weatherforcast;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -15,25 +17,29 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.dejan.weatherforcast.R;import org.json.JSONException;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.ClassNotFoundException;import java.lang.Math;import java.lang.Override;import java.lang.String;import java.lang.Void;import java.text.SimpleDateFormat;
+import java.lang.ClassNotFoundException;
+import java.lang.Math;
+import java.lang.String;
+import java.lang.Void;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public class WeatherForecast extends ActionBarActivity {
-    TextView cityName, descriprion, temp, day;
+    TextView cityName, descriprion, temp, day,minTempt,maxTempt;
     String location;
     CurrentWeather curentweather = new CurrentWeather();
     ArrayList<DailyForecast> daliyweather = new ArrayList<>();
@@ -43,9 +49,9 @@ public class WeatherForecast extends ActionBarActivity {
     Weather tepmWeather;
     List<Weather> cityList = new ArrayList<>();
     private GestureDetectorCompat gestureDetectorCompat;
+    RelativeLayout layout;
+    LinearLayout mLinearLayourHourlyForecasts;
 
-
-    //ListView days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,75 +60,117 @@ public class WeatherForecast extends ActionBarActivity {
         cityName = (TextView) findViewById(R.id.city_name);
         descriprion = (TextView) findViewById(R.id.descriprion);
         temp = (TextView) findViewById(R.id.temp);
-        day = (TextView) findViewById(R.id.day);
-
-
-
+        day = (TextView) findViewById(R.id.curentDay);
+        maxTempt = (TextView) findViewById(R.id.maxTemp);
+        minTempt = (TextView) findViewById(R.id.minTemp);
         fragment_2 = (Fragment_2)getFragmentManager().findFragmentById(R.id.fragment2);
         fragment1= (Fragment_1)getFragmentManager().findFragmentById(R.id.fragment);
-
+         mLinearLayourHourlyForecasts = (LinearLayout) findViewById(R.id.horizontalLayoutForHourlyForecasts);
         Intent intent = getIntent();
         location = intent.getStringExtra("city");
         cityList=read();
-
         JSONWeatherTask task = new JSONWeatherTask(this);
         task.execute(new String[]{location});
         gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
-
-
-
     }
-
-
-
-
 
     public void  curent(Weather weather){
 
         tepmWeather=weather;
         String newTemp = "" + Math.round((weather.currentWeather.getTemp() - 273.15)) + "°c";
-        String minMax = "TODAY Max Temp:" + Math.round((weather.currentWeather.getTempMax() - 273.15)) + "°c , Min Temp:" + Math.round((weather.currentWeather.getTempMin() - 273.15)) + "°c";
+        String maxTemp =  Math.round((weather.currentWeather.getTempMax() - 273.15)) + "°c , ";
+        String minTemp =  Math.round((weather.currentWeather.getTempMin() - 273.15)) + "°c";
         cityName.setText(weather.currentWeather.getName());
         cityName.setTextColor(Color.BLACK);
         temp.setText(newTemp);
         temp.setTextColor(Color.BLACK);
         descriprion.setText(weather.currentWeather.getDescription());
         descriprion.setTextColor(Color.BLACK);
-        day.setText(minMax);
+        Date date = new Date ((weather.currentWeather.getDay()*1000));
+        day.setText("" + new SimpleDateFormat("EEEE").format(date));
+        maxTempt.setText(maxTemp);
+        maxTempt.setTextColor(Color.BLACK);
+        minTempt.setText(minTemp);
         day.setTextColor(Color.BLACK);
+        layout= (RelativeLayout) findViewById(R.id.weatherforcast);
+        switch (weather.currentWeather.getIcon()){
 
+            case "01d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.clearsky));
+                break;
+            case "02d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.fewclouds));
+                break;
+            case "03d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.scatteredclouds));
+                break;
+            case "04d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.brokenclouds));
+                break;
+            case "09d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.showerrain));
+                break;
+            case "10d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.rain));
+                break;
+            case "11d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.thunderstorm));
+                break;
+            case "13d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.snow));
+                break;
+            case "50d" :
+                layout.setBackground(getResources().getDrawable(R.drawable.mist));
+                break;
+            case "a01n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.clearsky));;
+                break;
+            case "a02n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.fewclouds));
+                break;
+            case "a03n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.scatteredclouds));
+                break;
+            case "a04n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.brokenclouds));
+                break;
+            case "a09n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.showerrain));
+                break;
+            case "a10n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.rain));
+                break;
+            case "a11n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.thunderstorm));
+                break;
+            case "a13n" :
+                layout.setBackground(getResources().getDrawable(R.drawable.mist));
+                break;
+        }
     }
 
     public void Daily(Weather weather){
 
-             MyListAdapter files = new MyListAdapter(this, R.layout.daliylistview, weather.dailyForecasts);
-             fragment_2.days.setAdapter(files);
+            MyListAdapter files = new MyListAdapter(this, R.layout.daliylistview, weather.dailyForecasts);
+            fragment_2.days.setAdapter(files);
          }
 
     public  void Hourly(Weather weather){
-        LinearLayout layout = (LinearLayout)findViewById(R.id.horizontalLayout);
+
         for (int i = 0; i < weather.hourlyForecasts.size(); i++){
-            TextView textView = new TextView(getApplicationContext());
-            textView.setText(""+weather.hourlyForecasts.get(i));
-            textView.setTextColor(Color.BLACK);
-            layout.addView(textView);
+            mLinearLayourHourlyForecasts.addView(new HourlyForecastView(this,weather.hourlyForecasts.get(i)));
 
         }
-
-
-
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.gestureDetectorCompat.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_weather__forcast, menu);
         return true;
     }
@@ -139,21 +187,17 @@ public class WeatherForecast extends ActionBarActivity {
             Intent intent = new Intent(WeatherForecast.this, CityList.class);
             startActivity(intent);
             finish();
-
             return true;
         }
         if (id == R.id.addCity) {
             Intent intent = new Intent(WeatherForecast.this, NewCity.class);
             startActivity(intent);
-            finish();
-
             return true;
         }
         if (id == R.id.refresh) {
             JSONWeatherTask task = new JSONWeatherTask(this);
-            String s=tepmWeather.currentWeather.getName();
-            task.execute(new String[]{s});
-
+            String cityName=tepmWeather.currentWeather.getName();
+            task.execute(new String[]{cityName});
             return true;
         }
 
@@ -161,7 +205,7 @@ public class WeatherForecast extends ActionBarActivity {
     }
 
 
-        public void putCity( Weather w){
+    public void putCity( Weather w){
 
             if(cityList.size()==0){
                 cityList.add(w);
@@ -188,7 +232,7 @@ public class WeatherForecast extends ActionBarActivity {
             saveData(cityList);}
         }
 
-        public void saveData(List<Weather> list){
+    public void saveData(List<Weather> list){
 
             String fileName ="save.txt";
             Context context = getApplicationContext();
@@ -220,7 +264,7 @@ public class WeatherForecast extends ActionBarActivity {
             }
         }
 
-        public List<Weather>  read(){
+    public List<Weather>  read(){
 
             List<Weather> list =new ArrayList<Weather>();
             String file ="save.txt";
@@ -247,15 +291,10 @@ public class WeatherForecast extends ActionBarActivity {
             return list;
         }
 
-
-
-
-
     private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
         Weather weather = new Weather();
         WeatherForecast context;
-
-
+        LinearLayout layoutProgresBar = (LinearLayout) findViewById(R.id.layoutProgresBar);
 
         public JSONWeatherTask(final WeatherForecast context) {
             super();
@@ -263,33 +302,36 @@ public class WeatherForecast extends ActionBarActivity {
             this.context = context;
         }
 
+        @Override
+        protected void onPreExecute() {
+            layoutProgresBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Weather doInBackground(String... params) {
-
 
             String curent = ((new WeatherClient()).getCurrentWeather(params[0]));
             String daliy = ((new WeatherClient()).getDailyWeather(params[0]));
             String hourly=((new WeatherClient()).getHaurlyWeather(params[0]));
 
-            try {
+            if((curent.equals("")||daliy.equals("")||hourly.equals(""))){
+                return null; }
+            else {
+                try {
                 curentweather = JsonWeatherPars.getCurrentWeather(curent);
                 daliyweather = JsonWeatherPars.getDaliyWeather(daliy);
                 hourlyForecast= JsonWeatherPars.getHourlyWeather(hourly);
-
-
                 weather.currentWeather = curentweather;
                 weather.dailyForecasts = daliyweather;
                 weather.hourlyForecasts=hourlyForecast;
-
+                putCity(weather);
+                return weather;
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-           putCity(weather);
-
-            return weather;
+            }
+            return null;
 
         }
 
@@ -298,22 +340,47 @@ public class WeatherForecast extends ActionBarActivity {
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
 
+        if(weather == null) {
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(WeatherForecast.this);
+            alert.setTitle("make sure that you have internet connection");
+            alert.setMessage("TRY AGAIN");
+            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    JSONWeatherTask task = new JSONWeatherTask(WeatherForecast.this);
+                    task.execute(new String[]{location});
+                    dialog.dismiss();
+
+                }
+            });
+            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    dialog.dismiss();
+                }
+            });
+
+
+
+            alert.show();
+        } else {
             curent(weather);
             Daily(weather);
             Hourly(weather);
         }
+            layoutProgresBar.setVisibility(View.GONE);
 
+        }}
 
+        public class MyListAdapter extends ArrayAdapter {
 
-
-    }
-
-    class MyListAdapter extends ArrayAdapter {
-
-        ArrayList<DailyForecast> list;
-
-        LayoutInflater inflater;
-
+            ArrayList<DailyForecast> list;
+            LayoutInflater inflater;
 
         public MyListAdapter(Context context, int resource, List objects) {
             super(context, resource, objects);
@@ -335,26 +402,79 @@ public class WeatherForecast extends ActionBarActivity {
                 convertView = inflater.inflate(R.layout.daliylistview, parent, false);
             }
 
-
             TextView max = (TextView) convertView.findViewById(R.id.max);
             TextView min = (TextView) convertView.findViewById(R.id.min);
             TextView day = (TextView) convertView.findViewById(R.id.day);
-
+            ImageView icon= (ImageView)convertView.findViewById(R.id.icon_dalylist);
+            TextView desc = (TextView) convertView.findViewById(R.id.desc);
             Date date = new Date ((list.get(position).getDay()*1000));
-            max.setText("  Max Temp: "+Math.round((list.get(position).getMax())- 273.15) + "°c");
+            max.setText(Math.round((list.get(position).getMax())- 273.15) + "°c");
             max.setTextColor(Color.BLACK);
-            min.setText("  Min Temp: "+Math.round((list.get(position).getMin())- 273.15) + "°c");
-            min.setTextColor(Color.BLACK);
+            min.setText(Math.round((list.get(position).getMin())- 273.15) + "°c");
+            min.setTextColor(Color.GRAY);
             day.setText(""+new SimpleDateFormat("EEEE").format(date));
             day.setTextColor(Color.BLACK);
+            desc.setText(list.get(position).getDesc());
+            desc.setTextColor(Color.BLACK);
+            switch (list.get(position).getIcon()){
 
+                case "01d" :
+                    icon.setImageResource(R.drawable.a);
+                    break;
+                case "02d" :
 
-
+                    icon.setImageResource(R.drawable.a02d);
+                    break;
+                case "03d" :
+                    icon.setImageResource(R.drawable.a03d);
+                    break;
+                case "04d" :
+                    icon.setImageResource(R.drawable.a04d);
+                    break;
+                case "09d" :
+                    icon.setImageResource(R.drawable.a09d);
+                    break;
+                case "10d" :
+                    icon.setImageResource(R.drawable.a10d);
+                    break;
+                case "11d" :
+                    icon.setImageResource(R.drawable.a11d);
+                    break;
+                case "13d" :
+                    icon.setImageResource(R.drawable.a13d);
+                    break;
+                case "50d" :
+                    icon.setImageResource(R.drawable.a50d);
+                    break;
+                case "a01n" :
+                    icon.setImageResource(R.drawable.a01n);
+                    break;
+                case "a02n" :
+                    icon.setImageResource(R.drawable.a02n);
+                    break;
+                case "a03n" :
+                    icon.setImageResource(R.drawable.a03n);
+                    break;
+                case "a04n" :
+                    icon.setImageResource(R.drawable.a04n);
+                    break;
+                case "a09n" :
+                    icon.setImageResource(R.drawable.a09n);
+                    break;
+                case "a10n" :
+                    icon.setImageResource(R.drawable.a10n);
+                    break;
+                case "a11n" :
+                    icon.setImageResource(R.drawable.a11n);
+                    break;
+                case "a13n" :
+                    icon.setImageResource(R.drawable.a13n);
+            }
             return convertView;
         }
     }
 
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+    public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
 
         @Override
@@ -362,38 +482,26 @@ public class WeatherForecast extends ActionBarActivity {
 
 
                 int i=cityList.lastIndexOf(tepmWeather);
-           // if(!cityList.isEmpty()){
 
                 if(event2.getX() < event1.getX()) {
-                    //ulevo
-
-                   i--;
+                    i--;
                     if(i<0){
                         i=cityList.size()-1;
                     }
-
                     curent(cityList.get(i));
                     Daily(cityList.get(i));
                     Hourly(cityList.get(i));
 
                 }
                 if(event2.getX() > event1.getX()) {
-                    //udesno
-
                     i++;
                     if (i>cityList.size()-1) {
                         i=0;
                     }
-
                     curent(cityList.get(i));
                     Daily(cityList.get(i));
                     Hourly(cityList.get(i));
-
                 }
-
-
-
-
             return true;
         }
     }
