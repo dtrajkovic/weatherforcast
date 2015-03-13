@@ -6,17 +6,12 @@
         android:id="@+id/listcity"
         android:title="city list"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/addCity"
         android:title="addcity"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/refresh"
-        android:title="refresh"
-        android:orderInCategory="100"
         app:showAsAction="always"
         />
+
 </menu>

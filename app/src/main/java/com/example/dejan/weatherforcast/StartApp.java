@@ -21,12 +21,12 @@ public class StartApp extends ActionBarActivity {
         myList=read();
         if(myList.size()==0) {
             Intent intent = new Intent(StartApp.this, NewCity.class);
-
             startActivity(intent);
+            finish();
         }else{
             Intent intent = new Intent(StartApp.this, CityList.class);
-
             startActivity(intent);
+            finish();
         }
 
     }

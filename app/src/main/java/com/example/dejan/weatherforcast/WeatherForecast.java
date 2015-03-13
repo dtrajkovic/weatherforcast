@@ -194,12 +194,7 @@ public class WeatherForecast extends ActionBarActivity {
             startActivity(intent);
             return true;
         }
-        if (id == R.id.refresh) {
-            JSONWeatherTask task = new JSONWeatherTask(this);
-            String cityName=tepmWeather.currentWeather.getName();
-            task.execute(new String[]{cityName});
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -219,7 +214,7 @@ public class WeatherForecast extends ActionBarActivity {
 
                 if (s.equals(d) ) {
                     cityList.remove(cityList.get(i));
-                    cityList.add(w);
+                    cityList.add(i,w);
                     break;
                 } else {
                         if(i==(cityList.size()-1)) {
@@ -488,19 +483,18 @@ public class WeatherForecast extends ActionBarActivity {
                     if(i<0){
                         i=cityList.size()-1;
                     }
-                    curent(cityList.get(i));
-                    Daily(cityList.get(i));
-                    Hourly(cityList.get(i));
-
+                    String cityName=cityList.get(i).currentWeather.getName();
+                    JSONWeatherTask task = new JSONWeatherTask(WeatherForecast.this);
+                    task.execute(new String[]{cityName});
                 }
                 if(event2.getX() > event1.getX()) {
                     i++;
                     if (i>cityList.size()-1) {
                         i=0;
                     }
-                    curent(cityList.get(i));
-                    Daily(cityList.get(i));
-                    Hourly(cityList.get(i));
+                    String cityName=cityList.get(i).currentWeather.getName();
+                    JSONWeatherTask task = new JSONWeatherTask(WeatherForecast.this);
+                    task.execute(new String[]{cityName});
                 }
             return true;
         }
