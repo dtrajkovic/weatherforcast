@@ -122,28 +122,28 @@ public class WeatherForecast extends ActionBarActivity {
             case "50d" :
                 layout.setBackground(getResources().getDrawable(R.drawable.mist));
                 break;
-            case "a01n" :
+            case "01n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.clearsky));;
                 break;
-            case "a02n" :
+            case "02n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.fewclouds));
                 break;
-            case "a03n" :
+            case "03n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.scatteredclouds));
                 break;
-            case "a04n" :
+            case "04n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.brokenclouds));
                 break;
-            case "a09n" :
+            case  "09n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.showerrain));
                 break;
-            case "a10n" :
+            case "10n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.rain));
                 break;
-            case "a11n" :
+            case "11n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.thunderstorm));
                 break;
-            case "a13n" :
+            case "13n" :
                 layout.setBackground(getResources().getDrawable(R.drawable.mist));
                 break;
         }
