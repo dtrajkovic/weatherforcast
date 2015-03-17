@@ -70,7 +70,12 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
 
             return true;
         }
+        if (id == R.id.newCityGPS) {
+            Intent intent = new Intent(CityList.this, StartApp.class);
+            startActivity(intent);
 
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

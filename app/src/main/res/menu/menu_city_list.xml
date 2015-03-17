@@ -9,4 +9,9 @@
         android:title="newcity"
         android:orderInCategory="100"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/newCityGPS"
+        android:title="newcityGPS"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
 </menu>
