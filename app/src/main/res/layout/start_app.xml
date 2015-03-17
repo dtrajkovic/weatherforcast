@@ -6,20 +6,52 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".StartApp"
     android:background="@drawable/opening">
 
+   <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewLong"
+       android:text="Longitude"
+       android:textSize="20sp"
+       android:layout_alignParentLeft="true"/>
+     <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:id="@+id/editTextLong"
+         android:layout_toRightOf="@+id/textViewLong"
+         android:layout_marginStart="20dp"/>
 
-    <AutoCompleteTextView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewLat"
+        android:text="Latitude"
+        android:textSize="20sp"
+        android:layout_below="@+id/textViewLong"
+        android:layout_marginTop="20dp"
+
+        android:layout_alignBottom="@+id/textViewLat"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextLat"
+        android:layout_toRightOf="@+id/textViewLong"
+        android:layout_below="@+id/editTextLong"
+        android:layout_marginStart="20dp"
+        />
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/city"
-        android:hint="enter city name"
-        android:popupBackground="@color/background"
-        />
+        android:id="@+id/curentGPS"
+        android:onClick="search"
+        android:text="Get Current GPS Coordinates"
+        android:layout_below="@+id/editTextLat"/>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/submit"
         android:onClick="search"
-        android:text="search"
+        android:text="Search Weather"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 

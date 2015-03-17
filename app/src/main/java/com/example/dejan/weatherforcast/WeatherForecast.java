@@ -21,7 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.example.dejan.weatherforcast.R;import org.json.JSONException;
+
+import org.json.JSONException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,7 +41,9 @@ import java.util.List;
 
 public class WeatherForecast extends ActionBarActivity {
     TextView cityName, descriprion, temp, day,minTempt,maxTempt;
-    String location;
+    String location,sLo,sLa;
+    Double lat,lon;
+    boolean gps,city=true;
     CurrentWeather curentweather = new CurrentWeather();
     ArrayList<DailyForecast> daliyweather = new ArrayList<>();
     ArrayList<HourlyForecast> hourlyForecast= new ArrayList<>();
@@ -67,10 +70,34 @@ public class WeatherForecast extends ActionBarActivity {
         fragment1= (Fragment_1)getFragmentManager().findFragmentById(R.id.fragment);
          mLinearLayourHourlyForecasts = (LinearLayout) findViewById(R.id.horizontalLayoutForHourlyForecasts);
         Intent intent = getIntent();
+
         location = intent.getStringExtra("city");
+        boolean b=location==null;
+
+
+
+
+        if(!b){
+            JSONWeatherTask task = new JSONWeatherTask(this);
+            task.execute(new String[]{location});
+            city=false;
+        }else{
+            gps=false;
+            String [] gpsArr=intent.getStringArrayExtra("gpsCord");
+            sLa=gpsArr[0];
+            sLo=gpsArr[1];
+            lat=Double.parseDouble(sLa);
+            lon= Double.parseDouble(sLo);
+            JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(this);
+            task.execute(new Double[]{lat,lon});
+
+        }
+
+
+
+
         cityList=read();
-        JSONWeatherTask task = new JSONWeatherTask(this);
-        task.execute(new String[]{location});
+
         gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
@@ -305,28 +332,30 @@ public class WeatherForecast extends ActionBarActivity {
         @Override
         protected Weather doInBackground(String... params) {
 
-            String curent = ((new WeatherClient()).getCurrentWeather(params[0]));
-            String daliy = ((new WeatherClient()).getDailyWeather(params[0]));
-            String hourly=((new WeatherClient()).getHaurlyWeather(params[0]));
+                 String curent = ((new WeatherClientCity()).getCurrentWeather(params[0]));
+                 String daliy = ((new WeatherClientCity()).getDailyWeather(params[0]));
+                 String hourly=((new WeatherClientCity()).getHaurlyWeather(params[0]));
 
-            if((curent.equals("")||daliy.equals("")||hourly.equals(""))){
-                return null; }
-            else {
-                try {
-                curentweather = JsonWeatherPars.getCurrentWeather(curent);
-                daliyweather = JsonWeatherPars.getDaliyWeather(daliy);
-                hourlyForecast= JsonWeatherPars.getHourlyWeather(hourly);
-                weather.currentWeather = curentweather;
-                weather.dailyForecasts = daliyweather;
-                weather.hourlyForecasts=hourlyForecast;
-                putCity(weather);
-                return weather;
+                 if((curent.equals("")||daliy.equals("")||hourly.equals(""))){
+                     return null; }
+                 else {
+                     try {
+                         curentweather = JsonWeatherPars.getCurrentWeather(curent);
+                         daliyweather = JsonWeatherPars.getDaliyWeather(daliy);
+                         hourlyForecast= JsonWeatherPars.getHourlyWeather(hourly);
+                         weather.currentWeather = curentweather;
+                         weather.dailyForecasts = daliyweather;
+                         weather.hourlyForecasts=hourlyForecast;
+                         putCity(weather);
+                         return weather;
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            }
-            return null;
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                 }
+                 return null;
+
+
 
         }
 
@@ -372,7 +401,99 @@ public class WeatherForecast extends ActionBarActivity {
 
         }}
 
-        public class MyListAdapter extends ArrayAdapter {
+
+    private class JSONWeatherTaskGPS extends AsyncTask<Double, Void, Weather> {
+        Weather weather = new Weather();
+        WeatherForecast context;
+        LinearLayout layoutProgresBar = (LinearLayout) findViewById(R.id.layoutProgresBar);
+
+        public JSONWeatherTaskGPS(final WeatherForecast context) {
+            super();
+
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            layoutProgresBar.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected Weather doInBackground(Double... params) {
+            String curent = ((new WeatherClientGPS()).getCurrentWeather(params[0],params[1]));
+            String daliy = ((new WeatherClientGPS()).getDailyWeather(params[0], params[1]));
+            String hourly= ((new WeatherClientGPS()).getHaurlyWeather(params[0], params[1]));
+
+            if((curent.equals("")||daliy.equals("")||hourly.equals(""))){
+                return null; }
+            else {
+                try {
+                    curentweather = JsonWeatherPars.getCurrentWeather(curent);
+                    daliyweather = JsonWeatherPars.getDaliyWeather(daliy);
+                    hourlyForecast= JsonWeatherPars.getHourlyWeather(hourly);
+                    weather.currentWeather = curentweather;
+                    weather.dailyForecasts = daliyweather;
+                    weather.hourlyForecasts=hourlyForecast;
+                    putCity(weather);
+                    return weather;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+
+
+        }
+
+
+
+
+
+
+        @Override
+        protected void onPostExecute(Weather weather) {
+            super.onPostExecute(weather);
+
+            if(weather == null) {
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(WeatherForecast.this);
+                alert.setTitle("make sure that you have internet connection");
+                alert.setMessage("TRY AGAIN");
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(WeatherForecast.this);
+                        task.execute(new Double[]{lat,lon});
+
+                        dialog.dismiss();
+
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        dialog.dismiss();
+                    }
+                });
+
+
+
+                alert.show();
+            } else {
+                curent(weather);
+                Daily(weather);
+                Hourly(weather);
+            }
+            layoutProgresBar.setVisibility(View.GONE);
+
+        }}
+
+
+    public class MyListAdapter extends ArrayAdapter {
 
             ArrayList<DailyForecast> list;
             LayoutInflater inflater;

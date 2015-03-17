@@ -30,10 +30,10 @@ public class NewCity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_app);
+        setContentView(R.layout.new_city);
         JSONWeatherTask task = new JSONWeatherTask();
         task.execute();
-        city = ( AutoCompleteTextView) findViewById(R.id.city);
+        city = ( AutoCompleteTextView) findViewById(R.id.autoCity);
         search = (Button) findViewById(R.id.submit);
     }
 

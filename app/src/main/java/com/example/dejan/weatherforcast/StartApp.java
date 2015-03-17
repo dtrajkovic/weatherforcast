@@ -1,9 +1,19 @@
 package com.example.dejan.weatherforcast;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,20 +24,64 @@ import java.util.List;
 
 public class StartApp extends ActionBarActivity {
     List<Weather> myList;
+    GPSTracker gps;
+    EditText editLong,editLat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myList=read();
-        if(myList.size()==0) {
-            Intent intent = new Intent(StartApp.this, NewCity.class);
-            startActivity(intent);
-            finish();
-        }else{
-            Intent intent = new Intent(StartApp.this, CityList.class);
-            startActivity(intent);
-            finish();
-        }
+
+
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Do you want to use GPS cordinates to see weather");
+        alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setContentView(R.layout.start_app);
+                gps = new GPSTracker(StartApp.this);
+                editLong= (EditText) findViewById(R.id.editTextLong);
+                editLat= (EditText) findViewById(R.id.editTextLat);
+                if(gps.canGetLocation()) {
+                    double latitude = gps.getLatitude();
+                    double longitude = gps.getLongitude();
+                    
+                    editLong.setText(String.valueOf(longitude) );
+                    editLat.setText(String.valueOf(latitude));
+
+
+                } else {
+                    gps.showSettingsAlert();
+                }
+                dialog.dismiss();
+
+            }
+        });
+        alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(myList.size()==0) {
+                    Intent intent = new Intent(StartApp.this, NewCity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Intent intent = new Intent(StartApp.this, CityList.class);
+                    startActivity(intent);
+                    finish();
+                }
+                dialog.dismiss();
+            }
+        });
+
+
+
+        alert.show();
+
 
     }
 
@@ -53,4 +107,38 @@ public class StartApp extends ActionBarActivity {
 
         return list;
     }
+
+    public void search(View view) {
+        if(view.getId()==(R.id.submit)){
+            String sLo=editLong.getText().toString();
+            String sLa=editLat.getText().toString();
+            String [] gps={sLa,sLo};
+
+            if(sLa.equals("")||sLo.equals("")){
+                Toast.makeText(this,"YOU MUST ENTER GPS CORDINATES",Toast.LENGTH_LONG).show();
+
+            }else{
+
+                Intent intent = new Intent(StartApp.this, WeatherForecast.class);
+                intent.putExtra("gpsCord",gps);
+                startActivity(intent);
+                finish();}
+
+        }
+
+         if(view.getId()==(R.id.curentGPS)){
+            gps = new GPSTracker(StartApp.this);
+            editLong= (EditText) findViewById(R.id.editTextLong);
+            editLat= (EditText) findViewById(R.id.editTextLat);
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                editLong.setText(String.valueOf(longitude) );
+                editLat.setText(String.valueOf(latitude));
+        }
+    }
+
+
+
 }

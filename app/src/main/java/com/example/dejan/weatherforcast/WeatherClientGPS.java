@@ -1,35 +1,48 @@
 package com.example.dejan.weatherforcast;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.net.URLEncoder;
 
 /**
- * Created by Dejan on 2/19/2015.
+ * Created by Dejan on 3/17/2015.
  */
-public class WeatherClient {
+public class WeatherClientGPS {
 
-    private static String CURRENT_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+    private static String CURRENT_URL = "http://api.openweathermap.org/data/2.5/weather?";
     private static String API_KEY = "&APPID=8fa6f3cbeaf8435fe54c2d03a93e4342";
-    private static String DAILY_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
-    private static String HOURLY_URL = "http://api.openweathermap.org/data/2.5/forecast?q=";
+    private static String DAILY_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
-    public String getCurrentWeather(String location) {
+    private static String HOURLY_URL = "http://api.openweathermap.org/data/2.5/forecast?";
+
+    public String getCurrentWeather(double lat,double lon ) {
+
+        int i = (int)lat;
+        int v=(int)lon;
+
+
+        String a="lon="+String.valueOf(v);
+        String b="lat="+String.valueOf(i);
+        String lo= null;
+        String la=null;
+        try {
+            lo = URLEncoder.encode(a, "UTF-8");
+            la=URLEncoder.encode(b,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         URL url;
         HttpURLConnection con = null;
         InputStream is = null;
         try {
-            url = new URL(CURRENT_URL + location + API_KEY);
+            url = new URL(CURRENT_URL + b+"&"+a + API_KEY);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
@@ -62,12 +75,27 @@ public class WeatherClient {
     }
 
 
-    public String getDailyWeather(String location) {
+    public String getDailyWeather(double lat,double lon) {
+        int i = (int)lat;
+        int v=(int)lon;
+
+
+        String a="lon="+String.valueOf(i);
+        String b="lat="+String.valueOf(v);
+        String lo= null;
+        String la=null;
+        try {
+            lo = URLEncoder.encode(a, "UTF-8");
+            la=URLEncoder.encode(b,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         URL url;
         HttpURLConnection con = null;
         InputStream is = null;
         try {
-            url = new URL(DAILY_URL + location + API_KEY);
+            url = new URL(DAILY_URL   + b+"&"+a + API_KEY);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
@@ -99,13 +127,28 @@ public class WeatherClient {
         return "";
     }
 
-    public String getHaurlyWeather(String location) {
+    public String getHaurlyWeather(double lat,double lon) {
+        int i = (int)lat;
+        int v=(int)lon;
+
+
+        String a="lon="+String.valueOf(i);
+        String b="lat="+String.valueOf(v);
+        String lo= null;
+        String la=null;
+        try {
+            lo = URLEncoder.encode(a, "UTF-8");
+            la=URLEncoder.encode(b,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         URL url;
         HttpURLConnection con = null;
         InputStream is = null;
 
         try {
-            url = new URL(HOURLY_URL + location + API_KEY);
+            url = new URL(HOURLY_URL   + b+"&"+a+ API_KEY);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
