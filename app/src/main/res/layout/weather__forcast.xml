@@ -71,7 +71,8 @@
         android:textSize="15sp"
         android:id="@+id/minTemp"
         android:layout_above="@+id/fragment"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+       />
 
     <fragment
         android:layout_width="match_parent"

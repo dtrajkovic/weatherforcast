@@ -27,6 +27,7 @@ public class HourlyForecastView extends LinearLayout {
         super(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.hourly_forecast_view, this, true);
+
         time= (TextView) findViewById(R.id.dayAndTime_model);
         icon= (ImageView) findViewById(R.id.icon_model);
         temp= (TextView)findViewById(R.id.temp_model);
@@ -39,7 +40,6 @@ public class HourlyForecastView extends LinearLayout {
                 icon.setImageResource(R.drawable.a);
             break;
             case "02d" :
-
                 icon.setImageResource(R.drawable.a02d);
                 break;
             case "03d" :

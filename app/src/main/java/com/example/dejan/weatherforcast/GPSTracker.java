@@ -45,9 +45,7 @@ public class GPSTracker extends Service implements LocationListener{
     public Location getLocation() {
         try {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if(!isGPSEnabled && !isNetworkEnabled) {
@@ -101,13 +99,6 @@ public class GPSTracker extends Service implements LocationListener{
         return location;
     }
 
-
-    public void stopUsingGPS() {
-        if(locationManager != null) {
-            locationManager.removeUpdates(GPSTracker.this);
-        }
-    }
-
     public double getLatitude() {
         if(location != null) {
             latitude = location.getLatitude();
@@ -131,9 +122,7 @@ public class GPSTracker extends Service implements LocationListener{
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
         alertDialog.setTitle("GPS is settings");
-
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override

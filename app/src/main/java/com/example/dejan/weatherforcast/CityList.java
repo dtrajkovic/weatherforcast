@@ -35,9 +35,6 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
     String location;
     ArrayAdapter<Weather> adapter;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +85,6 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
         ObjectInputStream stream;
         try {
             fis = context.openFileInput( file );
-
             stream = new ObjectInputStream(fis);
             list = (List<Weather> )stream.readObject();
             stream.close();
@@ -106,7 +102,12 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
 
         Intent intent = new Intent(CityList.this,WeatherForecast.class);
         location=myList.get(position).currentWeather.getName();
-        intent.putExtra("city", location);
+
+        String sLo= String.valueOf(myList.get(position).currentWeather.getLon());
+        String sLa=String.valueOf(myList.get(position).currentWeather.getLat());
+        String [] gps={sLa,sLo};
+
+        intent.putExtra("gpsCord", gps);
         startActivity(intent);
         finish();
 
@@ -197,9 +198,11 @@ public class CityList extends ActionBarActivity implements AdapterView.OnItemCli
             }
 
             Weather weather =list.get(position);
+
             TextView city= (TextView) convertView.findViewById(R.id.citylist);
             TextView temp = (TextView) convertView.findViewById(R.id.temp_listview);
             TextView description= (TextView) convertView.findViewById(R.id.descriptionlist);
+
             city.setText(weather.currentWeather.getName());
             city.setTextColor(Color.BLACK);
             temp.setText(Math.round((weather.currentWeather.getTemp())- 273.15) + "°c");

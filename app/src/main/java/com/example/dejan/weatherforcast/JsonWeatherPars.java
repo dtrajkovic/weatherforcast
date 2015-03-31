@@ -17,17 +17,24 @@ public class JsonWeatherPars {
     public static CurrentWeather getCurrentWeather(String data) throws JSONException {
 
         CurrentWeather weather = new CurrentWeather();
+
         JSONObject jObj = new JSONObject(data);
         weather.setName(getString("name", jObj));
         weather.setDay(getLong("dt",jObj));
+
         JSONArray current = jObj.getJSONArray("weather");
         JSONObject desJSON = current.getJSONObject(0);
         weather.setDescription(getString("description", desJSON));
         weather.setIcon(getString("icon",desJSON));
+
         JSONObject tempMinMax = getObject("main", jObj);
         weather.setTemp(getInt("temp", tempMinMax));
         weather.setTempMin(getFloat("temp_min", tempMinMax));
         weather.setTempMax(getFloat("temp_max", tempMinMax));
+
+        JSONObject lonLat=getObject("coord",jObj);
+        weather.setLat(getDouble("lat",lonLat));
+        weather.setLon(getDouble("lon",lonLat));
 
         return weather;
     }
@@ -37,16 +44,17 @@ public class JsonWeatherPars {
 
 
         ArrayList<DailyForecast> myList = new ArrayList<>();
+
         JSONObject jObj = new JSONObject(data);
         JSONArray current = jObj.getJSONArray("list");
-        for (int i = 0; i < current.length(); i++) {
-            DailyForecast weather = new DailyForecast();
-            JSONObject desJSON = current.getJSONObject(i);
-            weather.setDay(getLong("dt", desJSON));
-            JSONObject main = getObject("temp", desJSON);
-            weather.setMax(getInt("max", main));
-            weather.setMin(getInt("min", main));
-            JSONArray wet= desJSON.getJSONArray("weather");
+            for (int i = 0; i < current.length(); i++) {
+                DailyForecast weather = new DailyForecast();
+                JSONObject desJSON = current.getJSONObject(i);
+                weather.setDay(getLong("dt", desJSON));
+                JSONObject main = getObject("temp", desJSON);
+                weather.setMax(getInt("max", main));
+                weather.setMin(getInt("min", main));
+        JSONArray wet= desJSON.getJSONArray("weather");
             for (int j = 0; j < wet.length(); j++) {
                 JSONObject wetJson= wet.getJSONObject(j);
                 weather.setDesc(getString("description",wetJson));
@@ -61,22 +69,22 @@ public class JsonWeatherPars {
     public static ArrayList getHourlyWeather(String data) throws JSONException {
 
         ArrayList<HourlyForecast> myList = new ArrayList<>();
+
         JSONObject jObj = new JSONObject(data);
         JSONArray current = jObj.getJSONArray("list");
-        for (int i = 0; i < current.length(); i++) {
-            HourlyForecast weather = new HourlyForecast();
-            JSONObject desJSON = current.getJSONObject(i);
-            long a =getLong("dt", desJSON);
-            weather.setTime(a*1000);
-            JSONObject main = getObject("main", desJSON);
-            weather.setTemp(getInt("temp", main));
-            Date date = new Date(a*1000);
-            weather.setConvertTime(""+new SimpleDateFormat("HH").format(date));
-            JSONArray wet= desJSON.getJSONArray("weather");
+            for (int i = 0; i < current.length(); i++) {
+                HourlyForecast weather = new HourlyForecast();
+                JSONObject desJSON = current.getJSONObject(i);
+                long a =getLong("dt", desJSON);
+                weather.setTime(a*1000);
+                JSONObject main = getObject("main", desJSON);
+                weather.setTemp(getInt("temp", main));
+                Date date = new Date(a*1000);
+                weather.setConvertTime(""+new SimpleDateFormat("HH").format(date));
+        JSONArray wet= desJSON.getJSONArray("weather");
             for (int j = 0; j < wet.length(); j++) {
                 JSONObject wetJson= wet.getJSONObject(j);
                 weather.setIcon(getString("icon",wetJson));
-
             }
             myList.add(weather);
         }
@@ -115,12 +123,21 @@ public class JsonWeatherPars {
     private static float getFloat(String tagName, JSONObject jObj) throws JSONException {
         return (float) jObj.getDouble(tagName);
     }
-
     private static int getInt(String tagName, JSONObject jObj) throws JSONException {
+
         return jObj.getInt(tagName);
     }
     private static long getLong(String tagName, JSONObject jObj) throws JSONException {
+
         return jObj.getLong(tagName);
+    }
+    private static double getDouble(String tagName, JSONObject jObj) {
+        try {
+            return jObj.getDouble(tagName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 

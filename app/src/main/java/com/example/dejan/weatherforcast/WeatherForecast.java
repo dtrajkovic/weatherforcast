@@ -70,14 +70,8 @@ public class WeatherForecast extends ActionBarActivity {
         fragment1= (Fragment_1)getFragmentManager().findFragmentById(R.id.fragment);
          mLinearLayourHourlyForecasts = (LinearLayout) findViewById(R.id.horizontalLayoutForHourlyForecasts);
         Intent intent = getIntent();
-
         location = intent.getStringExtra("city");
-        boolean b=location==null;
-
-
-
-
-        if(!b){
+        if(!(location==null)){
             JSONWeatherTask task = new JSONWeatherTask(this);
             task.execute(new String[]{location});
             city=false;
@@ -236,10 +230,13 @@ public class WeatherForecast extends ActionBarActivity {
 
             for (int i =0; i<cityList.size();i++) {
 
-                String s=w.currentWeather.getName();
-                String d= cityList.get(i).currentWeather.getName();
+                double olo=w.currentWeather.getLon();
+                double ola= w.currentWeather.getLat();
 
-                if (s.equals(d) ) {
+                double nlo= cityList.get(i).currentWeather.getLon();
+                double nla= cityList.get(i).currentWeather.getLat();
+
+                if ((olo==nlo)||(ola==nla) ) {
                     cityList.remove(cityList.get(i));
                     cityList.add(i,w);
                     break;
@@ -444,12 +441,6 @@ public class WeatherForecast extends ActionBarActivity {
 
 
         }
-
-
-
-
-
-
         @Override
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
@@ -464,9 +455,8 @@ public class WeatherForecast extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(WeatherForecast.this);
+                       JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(WeatherForecast.this);
                         task.execute(new Double[]{lat,lon});
-
                         dialog.dismiss();
 
                     }
@@ -479,9 +469,6 @@ public class WeatherForecast extends ActionBarActivity {
                         dialog.dismiss();
                     }
                 });
-
-
-
                 alert.show();
             } else {
                 curent(weather);
@@ -605,8 +592,10 @@ public class WeatherForecast extends ActionBarActivity {
                         i=cityList.size()-1;
                     }
                     String cityName=cityList.get(i).currentWeather.getName();
-                    JSONWeatherTask task = new JSONWeatherTask(WeatherForecast.this);
-                    task.execute(new String[]{cityName});
+                    double lo= cityList.get(i).currentWeather.getLon();
+                    double la=cityList.get(i).currentWeather.getLat();
+                    JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(WeatherForecast.this);
+                    task.execute(new Double[]{la,lo});
                 }
                 if(event2.getX() > event1.getX()) {
                     i++;
@@ -614,8 +603,10 @@ public class WeatherForecast extends ActionBarActivity {
                         i=0;
                     }
                     String cityName=cityList.get(i).currentWeather.getName();
-                    JSONWeatherTask task = new JSONWeatherTask(WeatherForecast.this);
-                    task.execute(new String[]{cityName});
+                    double lo= cityList.get(i).currentWeather.getLon();
+                    double la=cityList.get(i).currentWeather.getLat();
+                    JSONWeatherTaskGPS task = new JSONWeatherTaskGPS(WeatherForecast.this);
+                    task.execute(new Double[]{la,lo});
                 }
             return true;
         }

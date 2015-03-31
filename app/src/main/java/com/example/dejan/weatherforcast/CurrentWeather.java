@@ -17,6 +17,23 @@ public class CurrentWeather implements Serializable {
     private String icon;
     private long day;
     private  String convertDay;
+    double lon,lat;
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
 
     public long getDay() {
         return day;
