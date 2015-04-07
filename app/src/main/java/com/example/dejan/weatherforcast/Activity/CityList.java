@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,6 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.dejan.weatherforcast.R;
+import com.example.dejan.weatherforcast.Model.Weather;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

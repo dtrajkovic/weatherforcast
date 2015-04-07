@@ -1,45 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dejan.weatherforcast" >
+    package="com.example.dejan.weatherforcast">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
         android:largeHeap="true"
-       >
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".StartApp"
-            android:label="@string/app_name"
+            android:name=".Activity.StartApp"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.dejan.weatherforcast.WeatherForecast"
+            android:name=".Activity.WeatherForecast"
             android:label="@string/title_activity_weather__forcast"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.example.dejan.weatherforcast.CityList"
+            android:name=".Activity.CityList"
             android:label="@string/title_activity_city_list"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.example.dejan.weatherforcast.NewCity"
+            android:name=".Activity.NewCity"
             android:label="@string/title_activity_new_city"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="efcf1bef883db4a22bccb296ca9e8c2c4eb25520" />
     </application>
 
 </manifest>

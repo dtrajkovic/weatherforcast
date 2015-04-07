@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.HttpClient;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

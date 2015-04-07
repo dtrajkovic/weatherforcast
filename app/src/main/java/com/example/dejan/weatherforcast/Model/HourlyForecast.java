@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Model;
 
 import android.graphics.Bitmap;
 import android.media.Image;

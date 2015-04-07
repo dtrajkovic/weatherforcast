@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dejan.weatherforcast.R;
+
 /**
  * Created by Dejan on 2/18/2015.
  */
-public class Fragment_1 extends Fragment {
+public class HourlyFragment extends Fragment {
 
 
     @Nullable

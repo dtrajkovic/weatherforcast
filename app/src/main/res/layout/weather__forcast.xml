@@ -77,7 +77,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.example.dejan.weatherforcast.Fragment_1"
+        android:name="com.example.dejan.weatherforcast.Fragments.HourlyFragment"
         android:id="@+id/fragment"
         android:layout_above="@+id/fragment2"
         android:layout_alignParentLeft="true"
@@ -87,7 +87,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:name="com.example.dejan.weatherforcast.Fragment_2"
+        android:name="com.example.dejan.weatherforcast.Fragments.DalyFragment"
         android:id="@+id/fragment2"
         android:layout_alignParentBottom="true"
         android:layout_margin="5dp"/>

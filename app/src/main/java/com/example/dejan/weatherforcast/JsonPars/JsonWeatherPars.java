@@ -1,5 +1,10 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.JsonPars;
 
+
+import com.example.dejan.weatherforcast.Model.City;
+import com.example.dejan.weatherforcast.Model.CurrentWeather;
+import com.example.dejan.weatherforcast.Model.DailyForecast;
+import com.example.dejan.weatherforcast.Model.HourlyForecast;
 
 import org.json.JSONArray;
 import org.json.JSONException;

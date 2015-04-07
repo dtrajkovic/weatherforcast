@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,6 +21,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.dejan.weatherforcast.Fragments.HourlyFragment;
+import com.example.dejan.weatherforcast.Fragments.DalyFragment;
+import com.example.dejan.weatherforcast.HttpClient.WeatherClientCity;
+import com.example.dejan.weatherforcast.HttpClient.WeatherClientGPS;
+import com.example.dejan.weatherforcast.ImageReturn;
+import com.example.dejan.weatherforcast.JsonPars.JsonWeatherPars;
+import com.example.dejan.weatherforcast.Model.CurrentWeather;
+import com.example.dejan.weatherforcast.Model.DailyForecast;
+import com.example.dejan.weatherforcast.Model.HourlyForecast;
+import com.example.dejan.weatherforcast.Model.Weather;
+import com.example.dejan.weatherforcast.R;
+import com.example.dejan.weatherforcast.View.HourlyForecastView;
 
 import org.json.JSONException;
 import java.io.FileInputStream;
@@ -47,13 +60,14 @@ public class WeatherForecast extends ActionBarActivity {
     CurrentWeather curentweather = new CurrentWeather();
     ArrayList<DailyForecast> daliyweather = new ArrayList<>();
     ArrayList<HourlyForecast> hourlyForecast= new ArrayList<>();
-    Fragment_2 fragment_2;
-    Fragment_1 fragment1;
+    DalyFragment fragment_2;
+    HourlyFragment fragment1;
     Weather tepmWeather;
     List<Weather> cityList = new ArrayList<>();
     private GestureDetectorCompat gestureDetectorCompat;
     RelativeLayout layout;
     LinearLayout mLinearLayourHourlyForecasts;
+    ImageReturn mImage;
 
 
     @Override
@@ -66,9 +80,10 @@ public class WeatherForecast extends ActionBarActivity {
         day = (TextView) findViewById(R.id.curentDay);
         maxTempt = (TextView) findViewById(R.id.maxTemp);
         minTempt = (TextView) findViewById(R.id.minTemp);
-        fragment_2 = (Fragment_2)getFragmentManager().findFragmentById(R.id.fragment2);
-        fragment1= (Fragment_1)getFragmentManager().findFragmentById(R.id.fragment);
-         mLinearLayourHourlyForecasts = (LinearLayout) findViewById(R.id.horizontalLayoutForHourlyForecasts);
+        fragment_2 = (DalyFragment)getFragmentManager().findFragmentById(R.id.fragment2);
+        fragment1= (HourlyFragment)getFragmentManager().findFragmentById(R.id.fragment);
+        mLinearLayourHourlyForecasts = (LinearLayout) findViewById(R.id.horizontalLayoutForHourlyForecasts);
+        mImage=new ImageReturn();
         Intent intent = getIntent();
         location = intent.getStringExtra("city");
         if(!(location==null)){
@@ -86,10 +101,6 @@ public class WeatherForecast extends ActionBarActivity {
             task.execute(new Double[]{lat,lon});
 
         }
-
-
-
-
         cityList=read();
 
         gestureDetectorCompat = new GestureDetectorCompat(this, new MyGestureListener());
@@ -102,72 +113,21 @@ public class WeatherForecast extends ActionBarActivity {
         String maxTemp =  Math.round((weather.currentWeather.getTempMax() - 273.15)) + "°c , ";
         String minTemp =  Math.round((weather.currentWeather.getTempMin() - 273.15)) + "°c";
         cityName.setText(weather.currentWeather.getName());
-        cityName.setTextColor(Color.BLACK);
+        cityName.setTextColor(getResources().getColor(R.color.text_color));
         temp.setText(newTemp);
-        temp.setTextColor(Color.BLACK);
+        temp.setTextColor(getResources().getColor(R.color.text_color));
         descriprion.setText(weather.currentWeather.getDescription());
-        descriprion.setTextColor(Color.BLACK);
+        descriprion.setTextColor(getResources().getColor(R.color.text_color));
         Date date = new Date ((weather.currentWeather.getDay()*1000));
         day.setText("" + new SimpleDateFormat("EEEE").format(date));
         maxTempt.setText(maxTemp);
-        maxTempt.setTextColor(Color.BLACK);
+        maxTempt.setTextColor(getResources().getColor(R.color.text_color));
         minTempt.setText(minTemp);
-        day.setTextColor(Color.BLACK);
+        day.setTextColor(getResources().getColor(R.color.text_color));
         layout= (RelativeLayout) findViewById(R.id.weatherforcast);
-        switch (weather.currentWeather.getIcon()){
+        mImage.ReturnBackground(this,layout,weather.currentWeather.getIcon());
 
-            case "01d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.clearsky));
-                break;
-            case "02d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.fewclouds));
-                break;
-            case "03d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.scatteredclouds));
-                break;
-            case "04d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.brokenclouds));
-                break;
-            case "09d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.showerrain));
-                break;
-            case "10d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.rain));
-                break;
-            case "11d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.thunderstorm));
-                break;
-            case "13d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.snow));
-                break;
-            case "50d" :
-                layout.setBackground(getResources().getDrawable(R.drawable.mist));
-                break;
-            case "01n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.clearsky));;
-                break;
-            case "02n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.fewclouds));
-                break;
-            case "03n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.scatteredclouds));
-                break;
-            case "04n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.brokenclouds));
-                break;
-            case  "09n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.showerrain));
-                break;
-            case "10n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.rain));
-                break;
-            case "11n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.thunderstorm));
-                break;
-            case "13n" :
-                layout.setBackground(getResources().getDrawable(R.drawable.mist));
-                break;
-        }
+
     }
 
     public void Daily(Weather weather){
@@ -510,69 +470,23 @@ public class WeatherForecast extends ActionBarActivity {
             TextView day = (TextView) convertView.findViewById(R.id.day);
             ImageView icon= (ImageView)convertView.findViewById(R.id.icon_dalylist);
             TextView desc = (TextView) convertView.findViewById(R.id.desc);
+
             Date date = new Date ((list.get(position).getDay()*1000));
+
             max.setText(Math.round((list.get(position).getMax())- 273.15) + "°c");
-            max.setTextColor(Color.BLACK);
+            max.setTextColor(getResources().getColor(R.color.text_color));
+
             min.setText(Math.round((list.get(position).getMin())- 273.15) + "°c");
-            min.setTextColor(Color.GRAY);
+            min.setTextColor(getResources().getColor(R.color.text_color_2));
+
             day.setText(""+new SimpleDateFormat("EEEE").format(date));
-            day.setTextColor(Color.BLACK);
+            day.setTextColor(getResources().getColor(R.color.text_color));
+
             desc.setText(list.get(position).getDesc());
-            desc.setTextColor(Color.BLACK);
-            switch (list.get(position).getIcon()){
+            desc.setTextColor(getResources().getColor(R.color.text_color));
 
-                case "01d" :
-                    icon.setImageResource(R.drawable.a);
-                    break;
-                case "02d" :
+            mImage.ReturnIcon(icon,list.get(position).getIcon());
 
-                    icon.setImageResource(R.drawable.a02d);
-                    break;
-                case "03d" :
-                    icon.setImageResource(R.drawable.a03d);
-                    break;
-                case "04d" :
-                    icon.setImageResource(R.drawable.a04d);
-                    break;
-                case "09d" :
-                    icon.setImageResource(R.drawable.a09d);
-                    break;
-                case "10d" :
-                    icon.setImageResource(R.drawable.a10d);
-                    break;
-                case "11d" :
-                    icon.setImageResource(R.drawable.a11d);
-                    break;
-                case "13d" :
-                    icon.setImageResource(R.drawable.a13d);
-                    break;
-                case "50d" :
-                    icon.setImageResource(R.drawable.a50d);
-                    break;
-                case "a01n" :
-                    icon.setImageResource(R.drawable.a01n);
-                    break;
-                case "a02n" :
-                    icon.setImageResource(R.drawable.a02n);
-                    break;
-                case "a03n" :
-                    icon.setImageResource(R.drawable.a03n);
-                    break;
-                case "a04n" :
-                    icon.setImageResource(R.drawable.a04n);
-                    break;
-                case "a09n" :
-                    icon.setImageResource(R.drawable.a09n);
-                    break;
-                case "a10n" :
-                    icon.setImageResource(R.drawable.a10n);
-                    break;
-                case "a11n" :
-                    icon.setImageResource(R.drawable.a11n);
-                    break;
-                case "a13n" :
-                    icon.setImageResource(R.drawable.a13n);
-            }
             return convertView;
         }
     }

@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,6 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
+import com.example.dejan.weatherforcast.Gps.GPSTracker;
+import com.example.dejan.weatherforcast.R;
+import com.example.dejan.weatherforcast.Model.Weather;
+
+import io.fabric.sdk.android.Fabric;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,6 +35,10 @@ public class StartApp extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        setContentView(R.layout.start_app);
+        getSupportActionBar().setTitle(R.string.gps_tracker);
+
         myList=read();
 
 
@@ -39,7 +50,7 @@ public class StartApp extends ActionBarActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setContentView(R.layout.start_app);
+
                 gps = new GPSTracker(StartApp.this);
                 editLong= (EditText) findViewById(R.id.editTextLong);
                 editLat= (EditText) findViewById(R.id.editTextLat);
@@ -95,7 +106,7 @@ public class StartApp extends ActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.citylistfromGPS) {
-            Intent intent = new Intent(StartApp.this, CityList.class);
+            Intent intent = new Intent(this, CityList.class);
             startActivity(intent);
 
             return true;

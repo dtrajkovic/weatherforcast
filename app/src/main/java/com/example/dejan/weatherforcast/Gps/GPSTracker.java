@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Gps;
 
 /**
  * Created by Dejan on 3/17/2015.

@@ -18,11 +18,11 @@
             android:id="@+id/horizontalLayoutForHourlyForecasts">
 
 
-       <com.example.dejan.weatherforcast.HourlyForecastView
+       <com.example.dejan.weatherforcast.View.HourlyForecastView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content">
 
-           </com.example.dejan.weatherforcast.HourlyForecastView>
+           </com.example.dejan.weatherforcast.View.HourlyForecastView>
 
 
 

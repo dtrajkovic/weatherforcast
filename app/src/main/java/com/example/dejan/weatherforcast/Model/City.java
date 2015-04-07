@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Model;
 
 /**
  * Created by Dejan on 3/5/2015.

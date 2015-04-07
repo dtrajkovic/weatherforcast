@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Activity;
 
 
 import android.content.Intent;
@@ -11,6 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.dejan.weatherforcast.JsonPars.JsonWeatherPars;
+import com.example.dejan.weatherforcast.Model.City;
+import com.example.dejan.weatherforcast.R;
+
 import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,7 +91,7 @@ public class NewCity extends ActionBarActivity {
         protected ArrayList<City> doInBackground(String... params) {
             list=readJson();
             try {
-                cityList=JsonWeatherPars.getCity(list);
+                cityList= JsonWeatherPars.getCity(list);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

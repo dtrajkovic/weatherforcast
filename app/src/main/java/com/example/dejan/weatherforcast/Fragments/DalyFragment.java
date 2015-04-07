@@ -1,4 +1,4 @@
-package com.example.dejan.weatherforcast;
+package com.example.dejan.weatherforcast.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.example.dejan.weatherforcast.R;import java.util.ArrayList;
 /**
  * Created by Dejan on 2/18/2015.
  */
-public class Fragment_2 extends Fragment {
+public class DalyFragment extends Fragment {
 
     public ListView days;
 
